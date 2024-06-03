@@ -1,0 +1,227 @@
+ЛАБА 3 1
+
+import random
+word_list = ['экзамен', 'змейка', 'савва', 'реферат', 'рефрижератор', 'компьютер', 'гиппопотоломомонстросесквиппедалиофобия', 'коробка']
+def get_word():
+    word = random.choice(word_list)
+    return word.upper()
+def display_hangman(tries):
+    stages = [
+        '''
+           --------
+           |      |
+           |      O
+           |    / | /
+           |   /  |  /
+           |      |
+           |     / /
+           |    /   /
+           - 
+        ''',
+        '''
+           --------   
+           |      |
+           |      O
+           |    / | /
+           |   /  |  /
+           |      |
+           |     /
+           |    /
+           - 
+        ''',
+        '''
+           --------
+           |      |
+           |      O
+           |    / | /
+           |   /  |  /
+           |      |
+           |
+           |
+           - 
+        ''',
+        '''
+           --------
+           |      |
+           |      O
+           |    / |
+           |   /  |
+           |      |
+           |
+           |
+           - 
+        ''',
+        '''
+           --------
+           |      |
+           |      O
+           |      |
+           |      |
+           |      |
+           |
+           |
+           - 
+        ''',
+        '''
+           --------
+           |      |
+           |      O
+           |
+           |
+           |
+           |
+           |
+           -
+        ''',
+        '''
+           --------
+           |
+           |
+           |
+           |
+           |
+           |
+           |
+           -
+        ''',
+
+    ]
+    return stages[tries]
+def play(word):
+    word_completion = "_" * len(word)
+    guessed = False
+    guessed_letters = []
+    guessed_words = []
+    tries = 6
+
+    print('Давайте играть в угадайку слов!')
+    print(display_hangman(tries))
+    print(word_completion)
+    print()
+
+    while not guessed and tries > 0:
+        guess = input('Введите букву или слово целиком: ').upper()
+        if len(guess) == 1 and guess.isalpha():
+            if guess in guessed_letters:
+                print('Вы уже называли букву', guess)
+            elif guess not in word:
+                print('Буквы', guess, 'нет в слове.')
+                tries -= 1
+                guessed_letters.append(guess)
+            else:
+                print('Отличная работа, буква', guess, 'присутствует в слове!')
+                guessed_letters.append(guess)
+                word_as_list = list(word_completion)
+                indices = [i for i in range(len(word)) if word[i] == guess]
+                for index in indices:
+                    word_as_list[index] = guess
+                word_completion = ''.join(word_as_list)
+                if '_' not in word_completion:
+                    guessed = True
+        elif len(guess) == len(word) and guess.isalpha():
+            if guess in guessed_words:
+                print('Вы уже называли слово', guess)
+            elif guess != word:
+                print('Слово', guess, 'не является верным.')
+                tries -= 1
+                guessed_words.append(guess)
+            else:
+                guessed = True
+                word_completion = word
+        else:
+            print('Введите букву или целое слово.')
+        print(display_hangman(tries))
+        print(word_completion)
+        print()
+    if guessed:
+        print('Вы угадали слова, поздравляем!!!')
+    else:
+        print('Вы не угадали слово. Загаданным словом было ' + word + '. Может быть в следующий раз!')
+again = 'да'
+while again.lower() == 'да':
+    word = get_word()
+    play(word)
+    again = input('Играем еще раз? (да, нет):')
+_______________________________________________________________________________________________________
+
+ЛАБА 3 2
+
+# 1 Найти сумму элементов списка с нечетными номерами
+
+
+def input_list():
+    while True:
+        try:
+            nums = input("Введите элементы списка через пробел: ").split()
+            nums = [float(num) for num in nums]
+            return nums
+        except ValueError:
+            print("Ошибка! Пожалуйста, введите только вещественные числа.")
+
+
+def calculate_sum_odd_indices(nums):
+    sum_odd_indices = sum(nums[1::2])
+    return sum_odd_indices
+
+
+def main():
+    nums = input_list()
+
+    print("Ваш список:", nums)
+
+    sum_odd_indices = calculate_sum_odd_indices(nums)
+    print("Сумма элементов списка с нечетными номерами:", sum_odd_indices)
+
+
+if ( __name__ == "__main__" ):
+    main()
+
+_____________________________________________________________________________________________________
+
+ЛАБА 3 3
+
+# 2 Найти сумму элементов списка, расположенных между первым и
+последним отрицательными элементами
+
+def input_list():
+    while True:
+        try:
+            nums = input("Введите элементы списка через пробел: ").split()
+            nums = [float(num) for num in nums]
+            return nums
+        except ValueError:
+            print("Ошибка! Пожалуйста, введите только вещественные числа.")
+
+
+def find_negatives(nums):
+    first_neg_index = -1
+    last_neg_index = -1
+    for i in range(len(nums)):
+        if nums[i] < 0:
+            if first_neg_index == -1:
+                first_neg_index = i
+            last_neg_index = i
+    return first_neg_index, last_neg_index
+
+
+def calculate_sum_between_negatives(nums, first_neg_index, last_neg_index):
+    if first_neg_index == -1 or last_neg_index == -1:
+        return 0
+    sum_between_negatives = sum(nums[first_neg_index + 1:last_neg_index])
+    return sum_between_negatives
+
+
+def main():
+    nums = input_list()
+
+    print("Ваш список:", nums)
+
+    first_neg_index, last_neg_index = find_negatives(nums)
+    sum_between_negatives = calculate_sum_between_negatives(nums, first_neg_index, last_neg_index)
+
+    print("Сумма элементов списка, расположенных между первым и последним отрицательными элементами:",
+          sum_between_negatives)
+
+
+if __name__ == "__main__":
+    main()
